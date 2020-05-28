@@ -1,0 +1,14 @@
+# this service object gives access to the "postgres-deployment" object
+# kudectl get services # verify the services are applied
+
+apiVersion: v1 # gives us access to specific Object types like Deployment, Service etc
+kind: Service # Object type we want to create; Service is used to setup Networking in K8s Cluster
+metadata:
+  name: postgres-cluster-ip-service  # used as host name to connect to our Postgres Server
+spec:
+  type: ClusterIP # Service type; exposes "component: postgres" Pods from postgres-deployment to the orher deployments in the Cluster
+  selector:
+    component: postgres # reaches in the K8s Cluster and finds the objects with the label "component: postgres"
+  ports:
+    - port: 5432 # for use by other Pods to reach the "component: postgres" Pod
+      targetPort: 5432 # the exposed port on the "component: postgres" Pod

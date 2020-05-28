@@ -1,0 +1,26 @@
+# To update the "worker" container below: kubectl set image deployment/worker-deployment worker=tzetzo/multi_docker-worker:v5 
+# kubectl get deployments # verify the deployment is applied
+# kudectl get pods # verify the pods are applied
+
+apiVersion: apps/v1 # gives us access to specific Object types like Deployment, Service etc
+kind: Deployment # Object type we want to create; Deployment is used to setup a set of identical Pods
+metadata:
+  name: worker-deployment  # uniquely identifies this object in combination with the "kind"
+spec:
+  replicas: 1 # the number of Pod objects this Deployment object should create with the config listed under "template"
+  selector:
+    matchLabels:
+      component: worker # tells the Depoyment object the Pods he handles "component: worker";
+  template: # the configuration for every Pod object created by this Deployment object
+    metadata:
+      labels:
+        component: worker # used to reference the Pod object
+    spec:
+      containers:
+        - name: worker # name of the Container in the Pod
+          image: tzetzo/multi_docker-worker # the Image from Docker Hub
+          env:
+            - name: REDIS_HOST
+              value: redis-cluster-ip-service # redis-cluster-ip-service.yaml
+            - name: REDIS_PORT
+              value: '6379'

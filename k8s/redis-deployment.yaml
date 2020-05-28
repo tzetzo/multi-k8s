@@ -1,0 +1,22 @@
+# kubectl get deployments # verify the deployment is applied
+# kudectl get pods # verify the pods are applied
+
+apiVersion: apps/v1 # gives us access to specific Object types like Deployment, Service etc
+kind: Deployment # Object type we want to create; Deployment is used to setup a set of identical Pods
+metadata:
+  name: redis-deployment  # uniquely identifies this object in combination with the "kind"
+spec:
+  replicas: 1 # the number of Pod objects this Deployment object should create with the config listed under "template"
+  selector:
+    matchLabels:
+      component: redis # tells the Depoyment object the Pods he handles "component: redis";
+  template: # the configuration for every Pod object created by this Deployment object
+    metadata:
+      labels:
+        component: redis # used to reference the Pod object
+    spec:
+      containers:
+        - name: redis # name of the Container in the Pod
+          image: redis # the Official Redis Image from Docker Hub
+          ports:
+            - containerPort: 6379 # exposes port 6379

@@ -1,0 +1,13 @@
+# tells K8s to find storage using the below requirements
+
+apiVersion: v1
+kind: PersistentVolumeClaim # in Production, depending on the Provider, AWSElasticBlockStore, AzureFile etc will be auto used for storage
+metadata:
+  name: database-persistent-volume-claim
+spec:
+  storageClassName: manual # only when using Docker Desktop! binds PersistentVolumeClaim requests to the PersistentVolume
+  accessModes:
+    - ReadWriteOnce # Volume can be used by a single Node; Other options: ReadOnlyMany, ReadWriteMany
+  resources:
+    requests:
+      storage: 2Gi # 2GB of Storage
